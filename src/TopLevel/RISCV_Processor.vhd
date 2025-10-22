@@ -34,6 +34,12 @@ end  RISCV_Processor;
 
 
 architecture structure of RISCV_Processor is
+  --add control unit signal 2025-10-22 by Jongwoo Kim
+  signal s_ALUSrc     : std_logic;
+  signal s_MemToReg   : std_logic;
+  signal s_Branch     : std_logic;
+  signal s_Jump       : std_logic;
+  signal s_ALUOp      : std_logic_vector(1 downto 0);
 
   -- Required data memory signals
   signal s_DMemWr       : std_logic; -- TODO: use this signal as the final active high data memory write enable signal
@@ -70,6 +76,20 @@ architecture structure of RISCV_Processor is
 
   -- TODO: You may add any additional signals or components your implementation 
   --       requires below this comment
+  Component Control_Unit is
+    port(
+        opcode   : in  std_logic_vector(6 downto 0);
+        funct3   : in  std_logic_vector(2 downto 0);
+        funct7   : in  std_logic_vector(6 downto 0);
+        RegWrite : out std_logic;
+        ALUSrc   : out std_logic;
+        MemWrite : out std_logic;
+        MemToReg : out std_logic;
+        Branch   : out std_logic;
+        Jump     : out std_logic;
+        ALUOp    : out std_logic_vector(1 downto 0)
+    );
+end Component; 
 
 begin
 
@@ -97,10 +117,30 @@ begin
              we   => s_DMemWr,
              q    => s_DMemOut);
 
+
   -- TODO: Ensure that s_Halt is connected to an output control signal produced from decoding the Halt instruction (Opcode: 01 0100)
   -- TODO: Ensure that s_Ovfl is connected to the overflow output of your ALU
 
   -- TODO: Implement the rest of your processor below this comment! 
+  -- ==========================================================================================================
+  -- Control Unit Instance
+  -- ==========================================================================================================
+  U-CRTL: entity work.Control_Unit
+    port map (
+      -- instruction field slicing from s_Inst(Imem output)
+      opcode     => s_Inst(6 downto 0),     -- instruction[6:0]
+      funct3     => s_Inst(14 downto 12),   -- instruction[14:12]
+      funct7     => s_Inst(31 downto 25),   -- instruction[31:25]
+
+      --map to existing / new internal control signals
+      RegWrite   => s_RegWr,             -- Register file write enable
+      ALUSrc     => s_ALUSrc,               -- ALU input select signal
+      MemWrite   => s_DMemWr,             -- Data memory write enable
+      MemToReg   => s_MemToReg,             -- Data select MUX
+      Branch     => s_Branch,               -- Branch check signal
+      Jump       => s_Jump,                 -- jump check signal
+      ALUOp      => s_ALUOp                 -- ALU operation type (00, 01, 10 etc...)
+    );
 
 end structure;
 
