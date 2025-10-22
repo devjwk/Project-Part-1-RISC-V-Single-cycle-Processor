@@ -1,0 +1,118 @@
+// =============================================================
+// File: instruction.txt
+// Purpose: Integration guide for Fetch Logic into RISC-V Processor
+// Author: [Your Name]
+// =============================================================
+
+
+// =============================================================
+// 1️⃣ control.vhd Modifications
+// =============================================================
+
+// ➤ Add new output signal
+o_Jalr : out std_logic;
+
+// ➤ Modify opcode decoding section
+case iOpcode is
+  when "1101111" =>   -- JAL
+    o_Jump <= '1';
+    o_Branch <= '0';
+    o_Jalr <= '0';
+
+  when "1100111" =>   -- JALR
+    o_Jump <= '0';
+    o_Branch <= '0';
+    o_Jalr <= '1';
+
+  when "1100011" =>   -- BRANCH (BEQ/BNE/etc)
+    o_Jump <= '0';
+    o_Branch <= '1';
+    o_Jalr <= '0';
+
+  when others =>
+    o_Jump <= '0';
+    o_Branch <= '0';
+    o_Jalr <= '0';
+end case;
+
+
+// =============================================================
+// 2️⃣ RISCV_Processor.vhd Modifications
+// =============================================================
+
+// ➤ Add new internal signals
+signal s_Jalr        : std_logic;
+signal s_JalrTarget  : std_logic_vector(31 downto 0);
+
+// ➤ Update Fetch Logic instantiation
+fetch_inst : entity work.Fetch_Logic
+  port map (
+    iCLK          => iCLK,
+    iRST          => iRST,
+    iBranch       => s_Branch,
+    iJump         => s_Jump,
+    iJalr         => s_Jalr,           -- NEW
+    iALUZero      => s_ALUZero,
+    iBranchTarget => s_BranchTarget,
+    iJumpTarget   => s_JumpTarget,
+    iJalrTarget   => s_JalrTarget,     -- NEW
+    oNextInstAddr => s_NextInstAddr,
+    oIMemAddr     => s_IMemAddr
+  );
+
+// ➤ Connect Control Unit output
+s_Jalr <= o_Jalr;
+
+
+// =============================================================
+// 3️⃣ ALU or Address Generator Block
+// =============================================================
+
+// ➤ Add JALR target calculation
+s_JalrTarget <= std_logic_vector(
+  (unsigned(s_RS1) + unsigned(s_Imm_I)) and x"FFFFFFFE"
+);
+
+// Explanation:
+// - Computes (RS1 + immediate) for JALR target
+// - Ensures word alignment (bit 0 = 0)
+
+
+// =============================================================
+// 4️⃣ Testbench (Optional) — fetch_tb.vhd
+// =============================================================
+
+// ➤ Add JALR test case sequence
+// 1. Apply reset (iRST = '1')
+// 2. Sequential increment (PC + 4)
+// 3. Branch taken (iBranch='1', iALUZero='1')
+// 4. Jump (iJump='1')
+// 5. JALR (iJalr='1', custom iJalrTarget)
+// 6. Back to sequential execution
+
+// ➤ Observe waveform signals
+// s_PC, s_PCNext, iBranch, iJump, iJalr, iALUZero, oNextInstAddr, oIMemAddr
+
+// ➤ Expected behavior
+// When iJalr = '1', PC updates to (RS1 + Imm) & x"FFFFFFFE"
+
+
+// =============================================================
+// 5️⃣ Summary
+// =============================================================
+
+File                  | Change Summary                                | Purpose
+----------------------|-----------------------------------------------|------------------------------
+control.vhd           | Add o_Jalr + opcode decode                    | Generate JALR control signal
+RISCV_Processor.vhd   | Add s_Jalr, s_JalrTarget + port map update    | Integrate control/datapath
+ALU/Adder block       | Add JALR address computation logic            | Provide RS1 + Imm target
+Testbench (optional)  | Add JALR scenario                             | Verify correctness
+
+// =============================================================
+// ✅ After applying all modifications:
+// Processor supports full control flow:
+// - Sequential (PC+4)
+// - Conditional Branch
+// - JAL (Unconditional Jump)
+// - JALR (Register-based Jump)
+// =============================================================
