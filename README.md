@@ -1,15 +1,11 @@
 <div align="center">
 
-# RISC-V SINGLE-CYCLE PROCESSOR
+<img src="assets/banner.svg" alt="RISC-V SINGLE-CYCLE PROCESSOR — One instruction, one clock cycle: the baseline" width="100%">
 
-### One instruction, one clock cycle: the baseline
-
-**VHDL · RV32I · QuestaSim**
-
-![RTL](https://img.shields.io/badge/RTL-VHDL-6366F1?style=flat-square)
-![ISA](https://img.shields.io/badge/ISA-RV32I-0F172A?style=flat-square)
-![Simulation](https://img.shields.io/badge/Simulation-QuestaSim-0891B2?style=flat-square)
-![Stage](https://img.shields.io/badge/Stage-1%20of%203-F59E0B?style=flat-square)
+![RTL](https://img.shields.io/badge/RTL-VHDL-283272?style=flat-square&labelColor=10163F)
+![ISA](https://img.shields.io/badge/ISA-RV32I-10163F?style=flat-square&labelColor=10163F)
+![Simulation](https://img.shields.io/badge/Simulation-QuestaSim-B77F00?style=flat-square&labelColor=10163F)
+![Stage](https://img.shields.io/badge/Stage-1%20of%203-3B4BA8?style=flat-square&labelColor=10163F)
 
 Iowa State University · CprE 381 · Project Group F_04
 
@@ -44,6 +40,7 @@ Every instruction completes in one clock cycle. The design is simple to reason a
 ## Datapath
 
 ```mermaid
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#283272", "primaryTextColor": "#ffffff", "primaryBorderColor": "#10163F", "lineColor": "#94A3B8", "secondaryColor": "#283272", "tertiaryColor": "#10163F", "clusterBkg": "#F8FAFC", "clusterBorder": "#94A3B8", "edgeLabelBackground": "#F1F5F9", "fontFamily": "ui-sans-serif, system-ui, sans-serif"}}}%%
 flowchart LR
     PC["PC"] --> IM["Instruction<br/>memory"] --> DEC["Decode<br/>control"] --> RF["Register<br/>file"] --> ALU["ALU"] --> DM["Data<br/>memory"]
     DM -.->|"write back"| RF
