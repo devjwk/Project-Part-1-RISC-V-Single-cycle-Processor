@@ -45,8 +45,8 @@ Every instruction completes in one clock cycle. The design is simple to reason a
 
 ```mermaid
 flowchart LR
-    PC["PC"] --> IM["Instruction memory"] --> DEC["Decode · control unit"] --> RF["Register file"] --> ALU["ALU"] --> DM["Data memory"] --> WB["Write back"]
-    WB -.-> RF
+    PC["PC"] --> IM["Instruction<br/>memory"] --> DEC["Decode<br/>control"] --> RF["Register<br/>file"] --> ALU["ALU"] --> DM["Data<br/>memory"]
+    DM -.->|"write back"| RF
     ALU -.->|"branch · jal · jalr"| PC
 ```
 
