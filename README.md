@@ -1,6 +1,31 @@
-# RISC-V Single-Cycle Processor (CprE 381, Project Part 1)
+<div align="center">
 
-A single-cycle RV32I processor written in VHDL: the baseline design of a three-stage term project.
+# RISC-V SINGLE-CYCLE PROCESSOR
+
+### One instruction, one clock cycle: the baseline
+
+**VHDL · RV32I · QuestaSim**
+
+![RTL](https://img.shields.io/badge/RTL-VHDL-6366F1?style=flat-square)
+![ISA](https://img.shields.io/badge/ISA-RV32I-0F172A?style=flat-square)
+![Simulation](https://img.shields.io/badge/Simulation-QuestaSim-0891B2?style=flat-square)
+![Stage](https://img.shields.io/badge/Stage-1%20of%203-F59E0B?style=flat-square)
+
+Iowa State University · CprE 381 · Project Group F_04
+
+[Overview](#overview) · [Datapath](#datapath) · [My role](#my-role) · [Results](#results) · [Limitations](#limitations-and-next-steps)
+
+</div>
+
+---
+
+> **Where it stands — Complete**  
+> Runs the course test programs with a CPI of about 1.  
+> The 41.40 ns clock period is what the two pipelined designs set out to beat.
+
+| Clock period | Max frequency | CPI | Mergesort |
+| :---: | :---: | :---: | :---: |
+| **41.40 ns** | **≈ 24.2 MHz** | **≈ 1.00** | **70,214 ns** |
 
 | | |
 |---|---|
@@ -15,6 +40,17 @@ Every instruction completes in one clock cycle. The design is simple to reason a
 
 - **Why:** it is the reference point. The two pipelined processors that follow are measured against it.
 - **What it contains:** a 32-bit ALU built up from gates (ripple-carry adder, logic unit, barrel shifter, set-less-than), a control unit and ALU control, immediate generation, a register file, and fetch logic that handles branches, `jal` and `jalr`.
+
+## Datapath
+
+```mermaid
+flowchart LR
+    PC["PC"] --> IM["Instruction memory"] --> DEC["Decode · control unit"] --> RF["Register file"] --> ALU["ALU"] --> DM["Data memory"] --> WB["Write back"]
+    WB -.-> RF
+    ALU -.->|"branch · jal · jalr"| PC
+```
+
+Everything on this path happens in a single cycle.
 
 ## My role
 
