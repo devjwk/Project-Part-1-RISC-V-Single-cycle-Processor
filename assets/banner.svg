@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 280" role="img" aria-label="RISC-V SINGLE-CYCLE PROCESSOR">
+<title>RISC-V SINGLE-CYCLE PROCESSOR</title>
+<style>
+.kick{font:700 15px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:3px;fill:#F6B21A}
+.title{font:800 36px system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;letter-spacing:1.5px;fill:#ffffff}
+.tag{font:500 21px system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;fill:#ffffff;opacity:.86}
+.m{font:500 13px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace} .mb{font:700 14px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace} .mbig{font:800 20px system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif} .big{font:800 30px system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif} .term{font:500 15px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.bar{fill:#F6B21A}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10163F"/><stop offset="1" stop-color="#283272"/></linearGradient></defs>
+<rect width="1200" height="280" rx="20" fill="url(#g)"/>
+<rect class="bar" x="64" y="62" width="44" height="5" rx="2.5"/>
+<text x="64" y="100" class="kick">VHDL · RV32I · QUESTASIM</text>
+<text x="64" y="166" class="title">RISC-V SINGLE-CYCLE PROCESSOR</text>
+<text x="64" y="208" class="tag">One instruction, one clock cycle: the baseline</text>
+<g transform="translate(810,50)"><rect x="10" y="50" width="320" height="80" rx="12" fill="#3B4BA8" /><text x="170" y="86" class="m" text-anchor="middle" fill="#ffffff">FETCH · DECODE · EXECUTE · MEMORY · WRITE</text><text x="170" y="112" class="mb" text-anchor="middle" fill="#F6B21A">one clock cycle · 41.40 ns</text></g>
+</svg>
